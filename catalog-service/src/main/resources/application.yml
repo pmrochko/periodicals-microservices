@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: "catalog-service"
+
+server:
+  port: 8081
