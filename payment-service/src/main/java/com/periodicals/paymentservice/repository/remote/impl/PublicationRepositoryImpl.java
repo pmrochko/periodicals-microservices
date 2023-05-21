@@ -18,13 +18,13 @@ import java.util.Optional;
 @Slf4j
 public class PublicationRepositoryImpl implements PublicationRepository {
 
-    private final WebClient webClient;
-    private static final String CATALOG_SERVICE_URI = "http://localhost:8081/api/v1/";
+    private final WebClient.Builder webClientBuilder;
+    private static final String CATALOG_SERVICE_URI = "http://catalog-service/api/v1/";
 
     @Override
     public Optional<PublicationDTO> getPublicationById(Long publicationId) {
 
-        PublicationDTO publicationDTO = webClient
+        PublicationDTO publicationDTO = webClientBuilder.build()
                 .get()
                 .uri(CATALOG_SERVICE_URI + "/publications/" + publicationId)
                 .retrieve()
@@ -37,7 +37,8 @@ public class PublicationRepositoryImpl implements PublicationRepository {
     @Override
     public Boolean updatePublication(PublicationDTO publicationDTO) {
 
-        Boolean result = webClient.put()
+        Boolean result = webClientBuilder.build()
+                .put()
                 .uri(CATALOG_SERVICE_URI + "/publications/" + publicationDTO.getId())
                 .body(Mono.just(publicationDTO), PublicationDTO.class)
                 .retrieve()

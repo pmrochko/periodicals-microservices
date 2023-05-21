@@ -17,14 +17,14 @@ import java.util.Optional;
 @Slf4j
 public class UserRepositoryImpl implements UserRepository {
 
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
-    public static final String USER_SERVICE_URI = "http://localhost:8083/api/v1/";
+    public static final String USER_SERVICE_URI = "http://user-service/api/v1/";
 
     @Override
     public Optional<UserDTO> getUserById(Long userId) {
 
-        UserDTO userDTO = webClient
+        UserDTO userDTO = webClientBuilder.build()
                 .get()
                 .uri(USER_SERVICE_URI + "/users/" + userId)
                 .retrieve()
