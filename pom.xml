@@ -20,6 +20,7 @@
         <module>payment-service</module>
         <module>catalog-service</module>
         <module>discovery-server</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>

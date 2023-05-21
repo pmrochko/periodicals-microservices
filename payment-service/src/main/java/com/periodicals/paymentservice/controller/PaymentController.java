@@ -16,23 +16,23 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/payments")
 public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PostMapping("/publications/{publicationId}/subscription")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentDTO createPayment(@RequestParam @Positive Long userId,
-                                    @PathVariable @Positive Long publicationId,
+                                    @RequestParam @Positive Long publicationId,
                                     @RequestParam @Positive Integer subscriptionPeriod) {
         log.info("Creating a payment for publication with id: {}", publicationId);
         return paymentService.createPayment(userId, publicationId, subscriptionPeriod);
     }
 
-    @GetMapping("/users/{userId}/payments")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<PaymentDTO> getAllPayments(@PathVariable @Positive Long userId) {
+    public List<PaymentDTO> getAllPayments(@RequestParam @Positive Long userId) {
         log.info("Getting a list of payments for user with id: {}", userId);
         return paymentService.getAllPayments(userId);
     }
