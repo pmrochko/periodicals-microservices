@@ -17,10 +17,6 @@ public interface PaymentMapper {
 
     PaymentMapper INSTANCE = Mappers.getMapper(PaymentMapper.class);
 
-    @Mappings({
-            @Mapping(source = "publication.id", target = "publicationId"),
-            @Mapping(source = "user.id", target = "userId")
-    })
     PaymentDTO mapToPaymentDto(Payment payment);
 
     List<PaymentDTO> mapToListOfPaymentsDto(List<Payment> paymentList);

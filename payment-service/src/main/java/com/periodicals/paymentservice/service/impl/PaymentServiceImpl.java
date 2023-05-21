@@ -69,7 +69,7 @@ public class PaymentServiceImpl implements PaymentService {
         userRepository.getUserById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User was not found"));
 
-        List<Payment> paymentList = paymentRepository.findAllByUser_Id(userId);
+        List<Payment> paymentList = paymentRepository.findAllByUserId(userId);
         log.info("Successful getting a list of payments from the repository");
         return PaymentMapper.INSTANCE.mapToListOfPaymentsDto(paymentList);
     }

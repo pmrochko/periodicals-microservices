@@ -1,10 +1,7 @@
 package com.periodicals.paymentservice.model.entity;
 
 import com.periodicals.paymentservice.model.enums.PaymentStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,6 +12,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString
 @Table(name = "payment")
 public class Payment {
     @Id
@@ -25,10 +23,10 @@ public class Payment {
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
 
-    @Column(name = "publicationId", nullable = false)
+    @Column(name = "publication_Id", nullable = false)
     private Long publicationId;
 
-    @Column(name = "userId", nullable = false)
+    @Column(name = "user_Id", nullable = false)
     private Long userId;
 
     @Column(name = "date_of_payment", nullable = false)

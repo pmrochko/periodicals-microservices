@@ -10,8 +10,10 @@ import com.periodicals.userservice.model.validation.ValidPhoneNumberUa;
 import com.periodicals.userservice.model.validation.ValueOfEnum;
 import com.periodicals.userservice.model.validation.gpoup.OnCreate;
 import com.periodicals.userservice.model.validation.gpoup.OnUpdate;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
@@ -20,6 +22,8 @@ import javax.validation.constraints.*;
  * @author Pavlo Mrochko
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @JsonInclude(Include.NON_EMPTY)
 public class UserDTO {

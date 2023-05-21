@@ -19,7 +19,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final WebClient.Builder webClientBuilder;
 
-    public static final String USER_SERVICE_URI = "http://user-service/api/v1/";
+    public static final String USER_SERVICE_URI = "lb://user-service/api/v1/";
 
     @Override
     public Optional<UserDTO> getUserById(Long userId) {

@@ -19,7 +19,7 @@ import java.util.Optional;
 public class PublicationRepositoryImpl implements PublicationRepository {
 
     private final WebClient.Builder webClientBuilder;
-    private static final String CATALOG_SERVICE_URI = "http://catalog-service/api/v1/";
+    private static final String CATALOG_SERVICE_URI = "lb://catalog-service/api/v1/";
 
     @Override
     public Optional<PublicationDTO> getPublicationById(Long publicationId) {

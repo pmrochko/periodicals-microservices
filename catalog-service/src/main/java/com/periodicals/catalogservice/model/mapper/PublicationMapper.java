@@ -18,7 +18,6 @@ public interface PublicationMapper {
 
     Publication mapToPublication(PublicationDTO publicationDTO);
 
-    @Mapping(source = "topic.id", target = "topicId")
     PublicationDTO mapToPublicationDto(Publication publication);
 
     List<PublicationDTO> mapToListOfPublicationsDto(List<Publication> publicationList);

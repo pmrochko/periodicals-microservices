@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.periodicals.paymentservice.model.enums.UserRole;
 import com.periodicals.paymentservice.model.validation.ValueOfEnum;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
@@ -15,6 +17,8 @@ import javax.validation.constraints.*;
  * @author Pavlo Mrochko
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @JsonInclude(Include.NON_EMPTY)
 public class UserDTO {
