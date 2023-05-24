@@ -7,6 +7,7 @@ import com.periodicals.userservice.model.exception.NotUniqueParameterException;
 import com.periodicals.userservice.model.mapper.UserMapper;
 import com.periodicals.userservice.repository.UserRepository;
 import com.periodicals.userservice.service.UserService;
+import com.periodicals.userservice.utility.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
@@ -33,6 +35,10 @@ public class UserServiceImpl implements UserService {
             log.warn("Phone number has already exist");
             throw new NotUniqueParameterException("Phone number has already exist");
         }
+
+        // password encrypting
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+        userDTO.setPassword(encodedPassword);
 
         User user = UserMapper.INSTANCE.mapToUser(userDTO);
         user = userRepository.save(user);
@@ -84,7 +90,6 @@ public class UserServiceImpl implements UserService {
         );
 
         log.info("Successful updating a user in the repository");
-
     }
 
 }

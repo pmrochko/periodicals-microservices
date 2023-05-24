@@ -63,7 +63,7 @@ public class UserDTO {
     private Boolean access;
 
     @AssertTrue(message = "'password' and 'repeatPassword' should match", groups = OnCreate.class)
-    public boolean isPasswordsMatch() {
+    private boolean isPasswordsMatch() {
         return password != null && password.equals(repeatPassword);
     }
 
