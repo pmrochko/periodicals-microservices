@@ -58,23 +58,25 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public void updatePublication(Long publicationId, PublicationDTO publicationDTO) {
-        if (!publicationRepository.existsById(publicationId)) {
-            log.warn("Publication(id:{}) was not found", publicationId);
-            throw new EntityNotFoundException("Publication was not found");
-        }
-        if (!topicRepository.existsById(publicationDTO.getTopicId())) {
-            log.warn("Topic(id:{}) was not found", publicationDTO.getTopicId());
-            throw new EntityNotFoundException("Topic was not found");
+        Publication publication = publicationRepository.findById(publicationId)
+                .orElseThrow(() -> new EntityNotFoundException("Publication(id:" + publicationId + ") was not found"));
+
+        // Update Title
+        publication.setTitle(publicationDTO.getTitle());
+        // Update Description
+        publication.setDescription(publicationDTO.getDescription());
+        // Update Quantity
+        publication.setQuantity(publicationDTO.getQuantity());
+        // Update Price
+        publication.setPrice(publicationDTO.getPrice());
+        // Update Topic
+        if (!publication.getTopic().getId().equals(publicationDTO.getTopicId())) {
+            Topic topic = topicRepository.findById(publicationDTO.getTopicId())
+                    .orElseThrow(() -> new EntityNotFoundException("Topic(id:" + publicationDTO.getTopicId() + ") was not found"));
+            publication.setTopic(topic);
         }
 
-        publicationRepository.updatePublication(
-                publicationDTO.getTitle(),
-                publicationDTO.getDescription(),
-                publicationDTO.getTopicId(),
-                publicationDTO.getQuantity(),
-                publicationDTO.getPrice(),
-                publicationId
-        );
+        publicationRepository.save(publication);
 
         log.info("Successful updating a publication in the repository");
     }

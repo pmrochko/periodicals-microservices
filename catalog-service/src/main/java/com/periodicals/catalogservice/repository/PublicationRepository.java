@@ -1,19 +1,15 @@
 package com.periodicals.catalogservice.repository;
 
 import com.periodicals.catalogservice.model.entity.Publication;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-public interface PublicationRepository extends JpaRepository<Publication, Long> {
+public interface PublicationRepository extends MongoRepository<Publication, Long> {
 
     List<Publication> findAllByTopic_Id(Long topicId);
 
-    @Transactional
+    /*@Transactional
     @Modifying
     @Query("update Publication p set p.title = ?1, " +
                                     "p.description = ?2, " +
@@ -28,7 +24,7 @@ public interface PublicationRepository extends JpaRepository<Publication, Long> 
             Integer quantity,
             BigDecimal price,
             Long id
-    );
+    );*/
 
 
 }

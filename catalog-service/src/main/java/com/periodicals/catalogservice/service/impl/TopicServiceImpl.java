@@ -45,12 +45,14 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public void updateTopicName(Long topicId, TopicDTO topicDTO) {
-        if (!topicRepository.existsById(topicId)) {
-            log.warn("Topic(id:{}) was not found", topicId);
-            throw new EntityNotFoundException("Topic was not found");
+        Topic topic = topicRepository.findById(topicId)
+                .orElseThrow(() -> new EntityNotFoundException("Topic(id:" + topicId + ") was not found"));
+
+        if (!topicDTO.getName().equals(topic.getName())) {
+            topic.setName(topicDTO.getName());
+            topicRepository.save(topic);
         }
 
-        topicRepository.updateTopicName(topicDTO.getName(), topicId);
         log.info("Successful updating a topic in the repository");
     }
 
