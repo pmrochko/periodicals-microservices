@@ -2,6 +2,7 @@ package com.periodicals.paymentservice.service.impl;
 
 import com.periodicals.paymentservice.model.dto.PaymentDTO;
 import com.periodicals.paymentservice.model.dto.PublicationDTO;
+import com.periodicals.paymentservice.model.dto.UserDTO;
 import com.periodicals.paymentservice.model.entity.Payment;
 import com.periodicals.paymentservice.model.enums.PaymentStatus;
 import com.periodicals.paymentservice.model.exception.EntityNotFoundException;
@@ -35,7 +36,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public PaymentDTO createPayment(Long userId, Long publicationId, Integer subscriptionPeriod) {
+    public PaymentDTO createPayment(Long userId, String publicationId, Integer subscriptionPeriod) {
+
+        userRepository.getUserById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User was not found"));
 
         PublicationDTO publication = publicationRepository.getPublicationById(publicationId)
                 .orElseThrow(() -> new EntityNotFoundException("Publication was not found"));
@@ -56,9 +60,9 @@ public class PaymentServiceImpl implements PaymentService {
             payment.setTotalPrice(totalPrice);
             payment.setDateOfPayment(Timestamp.valueOf(LocalDateTime.now()));
 
-        paymentRepository.save(payment);
         // quantity of publication -1
-        decreaseQuantityByOne(publication);
+        decreaseQuantityByOne(publication, publicationId);
+        paymentRepository.save(payment);
 
         log.info("New payment was created successfully");
         return PaymentMapper.INSTANCE.mapToPaymentDto(payment);
@@ -66,7 +70,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public List<PaymentDTO> getAllPayments(Long userId) {
-        userRepository.getUserById(userId)
+         userRepository.getUserById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User was not found"));
 
         List<Payment> paymentList = paymentRepository.findAllByUserId(userId);
@@ -74,10 +78,10 @@ public class PaymentServiceImpl implements PaymentService {
         return PaymentMapper.INSTANCE.mapToListOfPaymentsDto(paymentList);
     }
 
-    private void decreaseQuantityByOne(PublicationDTO publication) {
+    private void decreaseQuantityByOne(PublicationDTO publication, String publicationId) {
 
         publication.setQuantity(publication.getQuantity() - 1);
-        publicationRepository.updatePublication(publication);
+        publicationRepository.updatePublication(publication, publicationId);
 
     }
 

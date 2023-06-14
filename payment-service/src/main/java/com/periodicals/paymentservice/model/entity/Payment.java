@@ -24,7 +24,7 @@ public class Payment {
     private BigDecimal totalPrice;
 
     @Column(name = "publication_Id", nullable = false)
-    private Long publicationId;
+    private String publicationId;
 
     @Column(name = "user_Id", nullable = false)
     private Long userId;

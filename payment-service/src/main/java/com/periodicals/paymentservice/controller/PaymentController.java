@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class PaymentController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentDTO createPayment(@RequestParam @Positive Long userId,
-                                    @RequestParam @Positive Long publicationId,
+                                    @RequestParam @NotBlank String publicationId,
                                     @RequestParam @Positive Integer subscriptionPeriod) {
         log.info("Creating a payment for publication with id: {}", publicationId);
         return paymentService.createPayment(userId, publicationId, subscriptionPeriod);

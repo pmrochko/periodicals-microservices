@@ -1,10 +1,12 @@
 package com.periodicals.catalogservice.model.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Set;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @AllArgsConstructor
@@ -13,10 +15,10 @@ import java.util.Set;
 public class Topic {
 
     @Id
-    private Long id;
+    private String id;
 
+    @Field(name = "name")
+    @Indexed(unique = true)
     private String name;
-
-    private Set<Publication> publications;
 
 }

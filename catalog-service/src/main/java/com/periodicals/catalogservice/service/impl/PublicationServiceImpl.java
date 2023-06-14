@@ -4,6 +4,7 @@ import com.periodicals.catalogservice.model.dto.PublicationDTO;
 import com.periodicals.catalogservice.model.entity.Publication;
 import com.periodicals.catalogservice.model.entity.Topic;
 import com.periodicals.catalogservice.model.exception.EntityNotFoundException;
+import com.periodicals.catalogservice.model.exception.NotUniqueParameterException;
 import com.periodicals.catalogservice.model.mapper.PublicationMapper;
 import com.periodicals.catalogservice.repository.PublicationRepository;
 import com.periodicals.catalogservice.repository.TopicRepository;
@@ -26,30 +27,37 @@ public class PublicationServiceImpl implements PublicationService {
     private final TopicRepository topicRepository;
 
     @Override
-    public PublicationDTO createPublication(Long topicId, PublicationDTO publicationDTO) {
+    public PublicationDTO createPublication(String topicName, PublicationDTO publicationDTO) {
+        if (publicationRepository.existsByTitle(publicationDTO.getTitle())) {
+            log.warn("Publication title(value:{}) has already exist", publicationDTO.getTitle());
+            throw new NotUniqueParameterException("Publication title has already exist");
+        }
+
         Publication publication = PublicationMapper.INSTANCE.mapToPublication(publicationDTO);
-        Topic topic = topicRepository.findById(topicId)
-                .orElseThrow(EntityNotFoundException::new);
-        publication.setTopic(topic);
+
+        Topic topic = topicRepository.findByName(topicName)
+                .orElseThrow(() -> new EntityNotFoundException("Topic was not found"));
+        publication.setTopicName(topic.getName());
+
         publication = publicationRepository.save(publication);
         log.info("New publication was created successfully");
         return PublicationMapper.INSTANCE.mapToPublicationDto(publication);
     }
 
     @Override
-    public List<PublicationDTO> getAllPublications(Long topicId) {
-        if (!topicRepository.existsById(topicId)) {
-            log.warn("Topic(id:{}) was not found", topicId);
+    public List<PublicationDTO> getAllPublications(String topicName) {
+        if (!topicRepository.existsByName(topicName)) {
+            log.warn("Topic(name:{}) was not found", topicName);
             throw new EntityNotFoundException("Topic was not found");
         }
 
-        List<Publication> publicationList = publicationRepository.findAllByTopic_Id(topicId);
+        List<Publication> publicationList = publicationRepository.findAllByTopicName(topicName);
         log.info("Successful getting a list of publications from the repository");
         return PublicationMapper.INSTANCE.mapToListOfPublicationsDto(publicationList);
     }
 
     @Override
-    public PublicationDTO getPublicationById(Long publicationId) {
+    public PublicationDTO getPublicationById(String publicationId) {
         Publication publication = publicationRepository.findById(publicationId)
                 .orElseThrow(() -> new EntityNotFoundException("Publication was not found"));
 
@@ -57,23 +65,29 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public void updatePublication(Long publicationId, PublicationDTO publicationDTO) {
+    public void updatePublication(String publicationId, PublicationDTO publicationDTO) {
         Publication publication = publicationRepository.findById(publicationId)
                 .orElseThrow(() -> new EntityNotFoundException("Publication(id:" + publicationId + ") was not found"));
 
         // Update Title
-        publication.setTitle(publicationDTO.getTitle());
+        if (titleHasAlreadyExist(publication, publicationDTO)) {
+            log.warn("Publication title(value:{}) has already exist", publicationDTO.getTitle());
+            throw new NotUniqueParameterException("Publication title has already exist");
+        } else {
+            publication.setTitle(publicationDTO.getTitle());
+        }
         // Update Description
         publication.setDescription(publicationDTO.getDescription());
         // Update Quantity
         publication.setQuantity(publicationDTO.getQuantity());
         // Update Price
         publication.setPrice(publicationDTO.getPrice());
-        // Update Topic
-        if (!publication.getTopic().getId().equals(publicationDTO.getTopicId())) {
-            Topic topic = topicRepository.findById(publicationDTO.getTopicId())
-                    .orElseThrow(() -> new EntityNotFoundException("Topic(id:" + publicationDTO.getTopicId() + ") was not found"));
-            publication.setTopic(topic);
+        // Update Topic name
+        if (!publication.getTopicName().equals(publicationDTO.getTopicName())) {
+            Topic topic = topicRepository.findByName(publicationDTO.getTopicName())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Topic(name:" + publicationDTO.getTopicName() + ") was not found"));
+            publication.setTopicName(topic.getName());
         }
 
         publicationRepository.save(publication);
@@ -82,7 +96,7 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public void deletePublication(Long publicationId) {
+    public void deletePublication(String publicationId) {
         if (!publicationRepository.existsById(publicationId)) {
             log.warn("Publication(id:{}) was not found", publicationId);
             throw new EntityNotFoundException("Publication was not found");
@@ -90,6 +104,11 @@ public class PublicationServiceImpl implements PublicationService {
 
         publicationRepository.deleteById(publicationId);
         log.info("Successful deleting a publication from the repository");
+    }
+
+    private boolean titleHasAlreadyExist(Publication publication, PublicationDTO publicationDTO) {
+        return !publication.getTitle().equals(publicationDTO.getTitle()) &&
+                publicationRepository.existsByTitle(publicationDTO.getTitle());
     }
 
 }

@@ -44,7 +44,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public void updateTopicName(Long topicId, TopicDTO topicDTO) {
+    public void updateTopicName(String topicId, TopicDTO topicDTO) {
         Topic topic = topicRepository.findById(topicId)
                 .orElseThrow(() -> new EntityNotFoundException("Topic(id:" + topicId + ") was not found"));
 
@@ -57,7 +57,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public void deleteTopic(Long topicId) {
+    public void deleteTopic(String topicId) {
         if (!topicRepository.existsById(topicId)) {
             log.warn("Topic(id:{}) was not found", topicId);
             throw new EntityNotFoundException("Topic was not found");

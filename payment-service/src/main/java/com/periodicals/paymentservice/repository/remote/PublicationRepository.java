@@ -9,8 +9,8 @@ import java.util.Optional;
  */
 public interface PublicationRepository {
 
-    Optional<PublicationDTO> getPublicationById(Long id);
+    Optional<PublicationDTO> getPublicationById(String id);
 
-    Boolean updatePublication(PublicationDTO publicationDTO);
+    void updatePublication(PublicationDTO publicationDTO, String publicationId);
 
 }

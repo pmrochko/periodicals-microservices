@@ -13,8 +13,8 @@ public interface TopicService {
 
     List<TopicDTO> getAllTopics();
 
-    void updateTopicName(Long topicId, TopicDTO topicDTO);
+    void updateTopicName(String topicId, TopicDTO topicDTO);
 
-    void deleteTopic(Long topicId);
+    void deleteTopic(String topicId);
 
 }

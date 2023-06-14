@@ -1,6 +1,7 @@
 package com.periodicals.paymentservice.repository.remote.impl;
 
 import com.periodicals.paymentservice.model.dto.PublicationDTO;
+import com.periodicals.paymentservice.model.exception.EntityNotFoundException;
 import com.periodicals.paymentservice.repository.remote.PublicationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,30 +23,32 @@ public class PublicationRepositoryImpl implements PublicationRepository {
     private static final String CATALOG_SERVICE_URI = "lb://catalog-service/api/v1/";
 
     @Override
-    public Optional<PublicationDTO> getPublicationById(Long publicationId) {
+    public Optional<PublicationDTO> getPublicationById(String publicationId) {
 
         PublicationDTO publicationDTO = webClientBuilder.build()
                 .get()
                 .uri(CATALOG_SERVICE_URI + "/publications/" + publicationId)
                 .retrieve()
                 .bodyToMono(PublicationDTO.class)
+                .onErrorResume(throwable -> {
+                    throw new EntityNotFoundException("Publication was not found");
+                })
                 .block();
 
         return Optional.ofNullable(publicationDTO);
     }
 
     @Override
-    public Boolean updatePublication(PublicationDTO publicationDTO) {
+    public void updatePublication(PublicationDTO publicationDTO, String publicationId) {
 
         Boolean result = webClientBuilder.build()
                 .put()
-                .uri(CATALOG_SERVICE_URI + "/publications/" + publicationDTO.getId())
+                .uri(CATALOG_SERVICE_URI + "/publications/" + publicationId)
                 .body(Mono.just(publicationDTO), PublicationDTO.class)
                 .retrieve()
                 .bodyToMono(Boolean.class)
                 .onErrorReturn(Boolean.FALSE)
                 .block();
 
-        return result != Boolean.FALSE;
     }
 }

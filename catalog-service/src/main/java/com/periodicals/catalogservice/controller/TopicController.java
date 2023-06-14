@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -39,8 +39,8 @@ public class TopicController {
 
     @PutMapping("/{topicId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Long> updateTopic(@PathVariable @Positive Long topicId,
-                                           @RequestBody @Valid TopicDTO topicDTO) {
+    public ResponseEntity<String> updateTopic(@PathVariable @NotBlank String topicId,
+                                              @RequestBody @Valid TopicDTO topicDTO) {
         log.info("Updating a topic with id: {}", topicId);
         topicService.updateTopicName(topicId, topicDTO);
         return new ResponseEntity<>(topicId, HttpStatus.OK);
@@ -48,7 +48,7 @@ public class TopicController {
 
     @DeleteMapping("/{topicId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Long> deleteTopic(@Positive @PathVariable Long topicId) {
+    public ResponseEntity<String> deleteTopic(@PathVariable @NotBlank String topicId) {
         log.info("Deleting a topic with id: {}", topicId);
         topicService.deleteTopic(topicId);
         return new ResponseEntity<>(topicId, HttpStatus.OK);

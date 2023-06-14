@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -23,32 +23,32 @@ public class PublicationController {
 
     private final PublicationService publicationService;
 
-    @PostMapping("/topics/{topicId}/publications")
+    @PostMapping("/topics/{topicName}/publications")
     @ResponseStatus(HttpStatus.CREATED)
-    public PublicationDTO createPublication(@PathVariable @Positive Long topicId,
+    public PublicationDTO createPublication(@PathVariable @NotBlank String topicName,
                                             @RequestBody @Valid PublicationDTO publicationDTO) {
-        log.info("Creating a new publication with id: {}", publicationDTO.getId());
-        return publicationService.createPublication(topicId, publicationDTO);
+        log.info("Creating a new publication");
+        return publicationService.createPublication(topicName, publicationDTO);
     }
 
-    @GetMapping("/topics/{topicId}/publications")
+    @GetMapping("/topics/{topicName}/publications")
     @ResponseStatus(HttpStatus.OK)
-    public List<PublicationDTO> getAllPublicationsByTopicId(@PathVariable @Positive Long topicId) {
-        log.info("Getting a list of all publications by a topicId: {}", topicId);
-        return publicationService.getAllPublications(topicId);
+    public List<PublicationDTO> getAllPublicationsByTopicName(@PathVariable @NotBlank String topicName) {
+        log.info("Getting a list of all publications by a topicName: {}", topicName);
+        return publicationService.getAllPublications(topicName);
     }
 
     @GetMapping("/publications/{publicationId}")
     @ResponseStatus(HttpStatus.OK)
-    public PublicationDTO getPublicationById(@PathVariable @Positive Long publicationId) {
+    public PublicationDTO getPublicationById(@PathVariable @NotBlank String publicationId) {
         log.info("Getting a publication by a publicationId: {}", publicationId);
         return publicationService.getPublicationById(publicationId);
     }
 
     @PutMapping("/publications/{publicationId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Long> updatePublication(@PathVariable @Positive Long publicationId,
-                                            @RequestBody @Valid PublicationDTO publicationDTO) {
+    public ResponseEntity<String> updatePublication(@PathVariable @NotBlank String publicationId,
+                                                    @RequestBody @Valid PublicationDTO publicationDTO) {
         log.info("Updating a publication with id: {}", publicationId);
         publicationService.updatePublication(publicationId, publicationDTO);
         return new ResponseEntity<>(publicationId, HttpStatus.OK);
@@ -56,7 +56,7 @@ public class PublicationController {
 
     @DeleteMapping("/publications/{publicationId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Long> deletePublication(@Positive @PathVariable Long publicationId) {
+    public ResponseEntity<String> deletePublication(@PathVariable @NotBlank String publicationId) {
         log.info("Deleting a publication with id: {}", publicationId);
         publicationService.deletePublication(publicationId);
         return new ResponseEntity<>(publicationId, HttpStatus.OK);

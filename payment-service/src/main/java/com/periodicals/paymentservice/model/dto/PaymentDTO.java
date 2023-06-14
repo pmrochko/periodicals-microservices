@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
@@ -30,8 +31,8 @@ public class PaymentDTO {
     @Positive
     private BigDecimal totalPrice;
 
-    @Positive
-    private Long publicationId;
+    @NotBlank
+    private String publicationId;
 
     @Positive
     private Long userId;

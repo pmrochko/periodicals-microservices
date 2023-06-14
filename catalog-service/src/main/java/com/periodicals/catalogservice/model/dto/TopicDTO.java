@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Set;
 
 /**
  * A DTO for the {@link com.periodicals.catalogservice.model.entity.Topic} entity
@@ -21,12 +20,9 @@ import java.util.Set;
 public class TopicDTO {
 
     @JsonProperty(access = Access.READ_ONLY)
-    private Long id;
+    private String id;
 
     @NotBlank
     private String name;
-
-    @JsonProperty(access = Access.READ_ONLY)
-    private Set<PublicationDTO> publications;
 
 }

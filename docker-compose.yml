@@ -1,0 +1,138 @@
+version: "3.8"
+services:
+
+  ## Postgres Config for User-Service
+  postrges-user:
+    image: postgres
+    container_name: postgres-user
+    ports:
+      - "5431:5431"
+    expose:
+      - "5431"
+    command: -p 5431
+    volumes:
+      - data:/postgres-user
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=user_service_db
+    restart: unless-stopped
+
+  ## Postgres Config for Payment-Service
+  postrges-payment:
+    image: postgres
+    container_name: postgres-payment
+    ports:
+      - "5433:5433"
+    expose:
+      - "5433"
+    command: -p 5433
+    volumes:
+      - data:/postgres-payment
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=payment_service_db
+    restart: unless-stopped
+
+  ## PgAdmin Tool Config
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "5050:80"
+    volumes:
+      - data:/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+    restart: unless-stopped
+
+  ## MongoDB Config for Catalog-Service
+  mongodb-catalog:
+    image: mongo
+    container_name: mongodb-catalog
+    ports:
+      - "27017:27017"
+    volumes:
+      - data:/mongodb-catalog
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    restart: unless-stopped
+
+  ## Mongo-Express Tool Config
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
+      - ME_CONFIG_MONGODB_SERVER=mongodb-catalog
+    restart: unless-stopped
+
+  ## Eureka-Server Config
+  discovery-server:
+    image: pmrochko/discovery-server
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+
+  ## Api-Gateway Config
+  api-gateway:
+    image: pmrochko/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8181:8080"
+    expose:
+      - "8181"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - discovery-server
+
+  ## User-Service Config
+  user-service:
+    image: pmrochko/user-service
+    container_name: user-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-user:5431/user_service_db
+    depends_on:
+      - postrges-user
+      - api-gateway
+      - discovery-server
+
+  ## Payment-Service Config
+  paymnet-service:
+    image: pmrochko/payment-service
+    container_name: payment-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-payment:5433/payment_service_db
+    depends_on:
+      - postrges-payment
+      - api-gateway
+      - discovery-server
+      - user-service
+      - catalog-service
+
+  ## Catalog-Service Config
+  catalog-service:
+    image: pmrochko/catalog-service
+    container_name: catalog-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongodb-catalog
+      - api-gateway
+      - discovery-server
+
+volumes:
+  data: {}
+
+networks:
+  default:
+    name: periodicals_microservices_network

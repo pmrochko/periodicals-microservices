@@ -1,6 +1,7 @@
 package com.periodicals.paymentservice.repository.remote.impl;
 
 import com.periodicals.paymentservice.model.dto.UserDTO;
+import com.periodicals.paymentservice.model.exception.EntityNotFoundException;
 import com.periodicals.paymentservice.repository.remote.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,9 @@ public class UserRepositoryImpl implements UserRepository {
                 .uri(USER_SERVICE_URI + "/users/" + userId)
                 .retrieve()
                 .bodyToMono(UserDTO.class)
+                .onErrorResume(throwable -> {
+                    throw new EntityNotFoundException("User was not found");
+                })
                 .block();
 
         return Optional.ofNullable(userDTO);

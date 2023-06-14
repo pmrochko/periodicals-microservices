@@ -9,14 +9,14 @@ import java.util.List;
  */
 public interface PublicationService {
 
-    PublicationDTO createPublication(Long topicId, PublicationDTO publicationDTO);
+    PublicationDTO createPublication(String topicName, PublicationDTO publicationDTO);
 
-    List<PublicationDTO> getAllPublications(Long topicId);
+    List<PublicationDTO> getAllPublications(String topicName);
 
-    PublicationDTO getPublicationById(Long publicationId);
+    PublicationDTO getPublicationById(String publicationId);
 
-    void updatePublication(Long publicationId, PublicationDTO publicationDTO);
+    void updatePublication(String publicationId, PublicationDTO publicationDTO);
 
-    void deletePublication(Long publicationId);
+    void deletePublication(String publicationId);
 
 }

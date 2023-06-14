@@ -23,15 +23,14 @@ import java.math.BigDecimal;
 public class PublicationDTO {
 
     @JsonProperty(access = Access.READ_ONLY)
-    private Long id;
+    private String id;
 
     @NotBlank
     private String title;
 
     private String description;
 
-    @Positive
-    private Long topicId;
+    private String topicName;
 
     @PositiveOrZero
     private Integer quantity;

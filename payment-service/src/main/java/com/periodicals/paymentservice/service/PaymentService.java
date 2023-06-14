@@ -10,7 +10,7 @@ import java.util.List;
 public interface PaymentService {
 
     PaymentDTO createPayment(Long userId,
-                             Long publicationId,
+                             String publicationId,
                              Integer subscriptionPeriod);
 
     List<PaymentDTO> getAllPayments(Long userId);
