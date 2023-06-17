@@ -59,7 +59,7 @@ The app defines following CRUD APIs.
 
 | Method | Url | Description | Sample Valid Request Body |
 | ------ | --- | ----------- | ------------------------- |
-| POST   | /api/v1/payments | Create new payment | [JSON](#paymentcreate) |
+| POST   | /api/v1/payments | Create new payment | *Request params*: subscriptionPeriod, userId, publicationId |
 | GET    | /api/v1/payments?userId= | Get a list of payments by user id | |
 
 ### Catalog [Topics]
@@ -80,3 +80,70 @@ The app defines following CRUD APIs.
 | POST   | /api/v1/topics/{topicName}/publications | Create new publication | [JSON](#publicationcreate) |
 | PUT    | /api/v1/publications/{publicationId}| Update a publication | [JSON](#publicationupdate) |
 | DELETE | /api/v1/publications/{publicationId} | Delete a publication | |
+
+Test them using postman or any other rest client.
+
+## Sample Valid JSON Request Bodys
+
+##### <a id="usercreate">Create User -> /api/v1/users</a>
+```json
+{
+    "userRole": "ROLE_READER",
+    "name": "FirstReaderName",
+    "surname": "FirstReaderSurname",
+    "email": "reader.periodicals@mail.com",
+    "phone": "+380123456789",
+    "password": "Reader123",
+    "repeatPassword": "Reader123",
+    "address": "Lviv, st. Shevchenka 31",
+    "access": "TRUE"
+}
+```
+
+##### <a id="userupdate">Update User -> /api/v1/users/{userId}</a>
+```json
+{
+    "userRole": "ROLE_ADMIN",
+    "name": "FirstAdminName upd",
+    "surname": "FirstAdminSurname upd",
+    "email": "admin.periodicals@mail.com",
+    "phone": "+380123456123",
+    "address": "Lviv, st. Shevchenka 222",
+    "access": "TRUE"
+}
+```
+
+##### <a id="topiccreate">Create Topic -> /api/v1/topics</a>
+```json
+{
+    "name" : "Sport"
+}
+```
+
+##### <a id="topicupdate">Update Topic -> /api/v1/topics/{topicId}</a>
+```json
+{
+    "name" : "Science"
+}
+```
+
+##### <a id="publicationcreate">Create Publication -> /api/v1/topics/{topicName}/publications</a>
+```json
+{
+    "title" : "TitleForPublication1",
+    "description" : "description1",
+    "quantity" : "350",
+    "price" : "125"
+}
+```
+
+##### <a id="publicationupdate">Update Publication -> /api/v1/publications/{publicationId}</a>
+```json
+{
+    "title" : "TitleForPublication1 upd",
+    "description" : "description1 upd",
+    "topicId" : "1",
+    "quantity" : "333",
+    "price" : "130"
+}
+```
