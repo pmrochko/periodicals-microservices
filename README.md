@@ -1,4 +1,4 @@
-### Система Періодичні видання.
-Адміністратор здійснює наповнення каталогу періодичних Видань.\
-Читач може оформити Передплату, попередньо вибравши періодичне Видання із списку.\
-Система підраховує суму для оплати і реєструє Платіж.
+## Periodicals
+The Administrator is responsible for filling the catalog of periodicals.\
+The Reader can subscribe to the periodical by first selecting a Publication from the list.\
+The system calculates the amount to be paid and registers the Payment.
