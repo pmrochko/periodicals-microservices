@@ -2,9 +2,11 @@ package com.periodicals.paymentservice.repository.remote.impl;
 
 import com.periodicals.paymentservice.model.dto.PublicationDTO;
 import com.periodicals.paymentservice.model.exception.EntityNotFoundException;
+import com.periodicals.paymentservice.model.exception.ServiceException;
 import com.periodicals.paymentservice.repository.remote.PublicationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -29,10 +31,15 @@ public class PublicationRepositoryImpl implements PublicationRepository {
                 .get()
                 .uri(CATALOG_SERVICE_URI + "/publications/" + publicationId)
                 .retrieve()
+                .onStatus(
+                        HttpStatus.SERVICE_UNAVAILABLE::equals,
+                        response -> Mono.error(new ServiceException("Catalog Service is unavailable, please try again later"))
+                )
+                .onStatus(
+                        HttpStatus.BAD_REQUEST::equals,
+                        response -> Mono.error(new EntityNotFoundException("Publication was not found, please enter a valid ID"))
+                )
                 .bodyToMono(PublicationDTO.class)
-                .onErrorResume(throwable -> {
-                    throw new EntityNotFoundException("Publication was not found");
-                })
                 .block();
 
         return Optional.ofNullable(publicationDTO);
@@ -41,13 +48,20 @@ public class PublicationRepositoryImpl implements PublicationRepository {
     @Override
     public void updatePublication(PublicationDTO publicationDTO, String publicationId) {
 
-        Boolean result = webClientBuilder.build()
+        webClientBuilder.build()
                 .put()
                 .uri(CATALOG_SERVICE_URI + "/publications/" + publicationId)
                 .body(Mono.just(publicationDTO), PublicationDTO.class)
                 .retrieve()
-                .bodyToMono(Boolean.class)
-                .onErrorReturn(Boolean.FALSE)
+                .onStatus(
+                        HttpStatus.SERVICE_UNAVAILABLE::equals,
+                        response -> Mono.error(new ServiceException("Catalog Service is unavailable, please try again later"))
+                )
+                .onStatus(
+                        HttpStatus.BAD_REQUEST::equals,
+                        response -> Mono.error(new EntityNotFoundException("Publication was not found, please enter a valid ID"))
+                )
+                .bodyToMono(Void.class)
                 .block();
 
     }

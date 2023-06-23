@@ -36,7 +36,7 @@ public class ErrorHandlingController {
     }
 
     @ExceptionHandler(ServiceException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public Error handleServiceException(ServiceException ex, HandlerMethod hm) {
         log.error("handleServiceException: message = {}, method = {}",
                 ex.getMessage(), hm.getMethod().getName(), ex);

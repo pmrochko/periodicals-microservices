@@ -17,7 +17,7 @@ public class ServiceException extends RuntimeException {
     }
 
     public ErrorType getErrorType() {
-        return ErrorType.FATAL_ERROR_TYPE;
+        return ErrorType.PROCESSING_ERROR_TYPE;
     }
 
 }

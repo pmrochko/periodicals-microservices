@@ -2,6 +2,9 @@ package com.periodicals.paymentservice.controller;
 
 import com.periodicals.paymentservice.model.dto.PaymentDTO;
 import com.periodicals.paymentservice.service.PaymentService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,8 @@ public class PaymentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CircuitBreaker(name = "createPayment")
+    @Retry(name = "createPayment")
     public PaymentDTO createPayment(@RequestParam @Positive Long userId,
                                     @RequestParam @NotBlank String publicationId,
                                     @RequestParam @Positive Integer subscriptionPeriod) {
