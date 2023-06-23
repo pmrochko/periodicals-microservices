@@ -20,7 +20,7 @@
    | PostgreSQL (name: *payment_service_db*) | *Payment* table |
    | MongoDB (name: *catalog_service_db*) | *Topic* and *Publication* collections|
 
-**3. Change username, password, url for each database in config files**
+**3. Change username, password for each database in config files**
 
 + open `src/main/resources/application.yml` or `src/main/resources/application-docker.yml` (if using docker compose) by going inside each service folder
 + change and `spring:datasource:username` and `spring:datasource:password` as per your db installation
@@ -42,9 +42,9 @@ The app defines following CRUD APIs.
 
 ### Eureka Discovery Server
 
-| Method | Url | Description |
-| ------ | --- | ----------- |
-| GET    | /api/v1/eureka | Go to Eureka page |
+| Method | Url         | Description |
+| ------ |-------------| ----------- |
+| GET    | /eureka/web | Go to Eureka page |
 
 ### Users
 
@@ -57,10 +57,11 @@ The app defines following CRUD APIs.
 
 ### Payments
 
-| Method | Url | Description | Sample Valid Request Body |
-| ------ | --- | ----------- | ------------------------- |
-| POST   | /api/v1/payments | Create new payment | *Request params*: subscriptionPeriod, userId, publicationId |
-| GET    | /api/v1/payments?userId= | Get a list of payments by user id | |
+| Method | Url                          | Description                       | Sample Valid Request Body |
+| ------ |------------------------------|-----------------------------------| ------------------------- |
+| POST   | /api/v1/payments             | Create new payment                | *Request params*: subscriptionPeriod, userId, publicationId |
+| GET    | /api/v1/payments?userId=     | Get a list of payments by user id | |
+| GET    | /api/v1/payments/actuator/** | Actuator (service health info)    | |
 
 ### Catalog [Topics]
   
