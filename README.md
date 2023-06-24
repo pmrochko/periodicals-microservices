@@ -4,6 +4,10 @@
   The *Reader* can subscribe to the periodical by first selecting a *Publication* from the list.\
   The system calculates the amount to be paid and registers the *Payment*.
 
+## Microservice Architecture Diagram
+
+<img width="650" alt="img" src="https://github.com/pmrochko/periodicals-microservices/assets/106275010/5bf97883-bf06-4b00-8481-f5a9e5963a39">
+
 ## Steps to Setup
 
 **1. Clone the repository**
@@ -16,7 +20,7 @@
 
    | Database | Table / Collection | 
    | -------- | ------------------ |
-   | PostgreSQL (name: *user_service_db*) | *User* table |
+   | PostgreSQL (name: *user_service_db*) | *Users* table |
    | PostgreSQL (name: *payment_service_db*) | *Payment* table |
    | MongoDB (name: *catalog_service_db*) | *Topic* and *Publication* collections|
 
