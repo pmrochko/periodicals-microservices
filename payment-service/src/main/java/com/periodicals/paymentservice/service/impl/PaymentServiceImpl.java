@@ -2,7 +2,6 @@ package com.periodicals.paymentservice.service.impl;
 
 import com.periodicals.paymentservice.model.dto.PaymentDTO;
 import com.periodicals.paymentservice.model.dto.PublicationDTO;
-import com.periodicals.paymentservice.model.dto.UserDTO;
 import com.periodicals.paymentservice.model.entity.Payment;
 import com.periodicals.paymentservice.model.enums.PaymentStatus;
 import com.periodicals.paymentservice.model.exception.EntityNotFoundException;
