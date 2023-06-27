@@ -12,6 +12,7 @@ import com.periodicals.catalogservice.service.PublicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -61,10 +62,12 @@ public class PublicationServiceImpl implements PublicationService {
         Publication publication = publicationRepository.findById(publicationId)
                 .orElseThrow(() -> new EntityNotFoundException("Publication was not found"));
 
+        log.info("Successful getting a publication from the repository");
         return PublicationMapper.INSTANCE.mapToPublicationDto(publication);
     }
 
     @Override
+    @Transactional
     public void updatePublication(String publicationId, PublicationDTO publicationDTO) {
         Publication publication = publicationRepository.findById(publicationId)
                 .orElseThrow(() -> new EntityNotFoundException("Publication(id:" + publicationId + ") was not found"));

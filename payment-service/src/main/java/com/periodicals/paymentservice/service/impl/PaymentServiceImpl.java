@@ -70,7 +70,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public List<PaymentDTO> getAllPayments(Long userId) {
-         userRepository.getUserById(userId)
+        userRepository.getUserById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User was not found"));
 
         List<Payment> paymentList = paymentRepository.findAllByUserId(userId);

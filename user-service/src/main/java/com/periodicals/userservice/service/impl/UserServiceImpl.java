@@ -63,16 +63,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(long userId, UserDTO userDTO) {
-
-        /*User authenticatedUser = userRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new EntityNotFoundException("User was not authenticated"));
-
-        if (authenticatedUser.getUserRole().equals(UserRole.ROLE_READER) &&
-                authenticatedUser.getId() != userId) {
-            log.warn("Student(id:{}) does not have access to other users", userId);
-            throw new DoesNotHaveAccessException("Student does not have access to other users");
-        }*/
-
         if (!userRepository.existsById(userId)) {
             log.warn("User(id:{}) was not found", userId);
             throw new EntityNotFoundException("User was not found");
