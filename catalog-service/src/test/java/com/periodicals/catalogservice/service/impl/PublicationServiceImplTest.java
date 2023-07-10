@@ -82,11 +82,11 @@ public class PublicationServiceImplTest {
         // Arrange
         String topicName = "Topic";
 
-        Publication publication1 = PublicationTestDataUtil.createPublicationEntity();;
+        Publication publication1 = PublicationTestDataUtil.createPublicationEntity();
         publication1.setId("p1");
         publication1.setTitle("t1");
 
-        Publication publication2 = PublicationTestDataUtil.createPublicationEntity();;
+        Publication publication2 = PublicationTestDataUtil.createPublicationEntity();
         publication2.setId("p2");
         publication2.setTitle("t2");
 
